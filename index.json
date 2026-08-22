@@ -1,250 +1,7 @@
 {
   "version": 1,
-  "updated_at": "2026-08-22T20:47:44Z",
+  "updated_at": "2026-08-22T20:53:13Z",
   "catalogs": [
-    {
-      "id": "classic_cinema",
-      "name": "🍿 Timeless Public Domain Cinema",
-      "type": "movie",
-      "url": "byos-classic-cinema/manifest.json",
-      "featured": false,
-      "items": [
-        {
-          "id": "charade-1963",
-          "title": "Charade",
-          "year": "1963",
-          "poster": "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop",
-          "backdrop": "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1920&auto=format&fit=crop",
-          "badge": "4K Color • Classic",
-          "rating": 8.5,
-          "rating_text": "8.5",
-          "duration": "1h 53m",
-          "genre": "Mystery • Thriller",
-          "resolution": "4K Remastered",
-          "synopsis": "Audrey Hepburn and Cary Grant star in a fast-paced Parisian romantic mystery filled with twists, stolen fortunes, and espionage.",
-          "streams": [
-            {
-              "name": "HLS Multi-Bitrate Master",
-              "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-              "quality": "1080p",
-              "format": "hls"
-            },
-            {
-              "name": "Direct Stream Sample",
-              "url": "https://archive.org/download/his_girl_friday/his_girl_friday.mp4",
-              "quality": "1080p",
-              "format": "mp4"
-            }
-          ],
-          "subtitles": []
-        },
-        {
-          "id": "his-girl-friday-1940",
-          "title": "His Girl Friday",
-          "year": "1940",
-          "poster": "https://images.unsplash.com/photo-1509281373149-e957c6296406?q=80&w=600&auto=format&fit=crop",
-          "backdrop": "https://images.unsplash.com/photo-1509281373149-e957c6296406?q=80&w=1920&auto=format&fit=crop",
-          "badge": "Screwball Comedy",
-          "rating": 8.9,
-          "rating_text": "8.9",
-          "duration": "1h 32m",
-          "genre": "Comedy • Romance",
-          "resolution": "Remastered HD",
-          "synopsis": "A hard-charging newspaper editor uses every trick in the book to keep his top investigative reporter ex-wife from remarrying and leaving her career behind.",
-          "streams": [
-            {
-              "name": "Archive.org Master MP4",
-              "url": "https://archive.org/download/his_girl_friday/his_girl_friday.mp4",
-              "quality": "1080p",
-              "format": "mp4"
-            },
-            {
-              "name": "Archive.org Direct MP4",
-              "url": "https://archive.org/download/his_girl_friday/his_girl_friday_512kb.mp4",
-              "quality": "480p",
-              "format": "mp4"
-            }
-          ],
-          "subtitles": []
-        },
-        {
-          "id": "the-general-1926",
-          "title": "The General",
-          "year": "1926",
-          "poster": "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=600&auto=format&fit=crop",
-          "backdrop": "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1920&auto=format&fit=crop",
-          "badge": "Buster Keaton Masterpiece",
-          "rating": 8.1,
-          "rating_text": "8.1",
-          "duration": "1h 15m",
-          "genre": "Action • Comedy",
-          "resolution": "Remastered HD",
-          "synopsis": "During the American Civil War, locomotive engineer Johnnie Gray is rejected by the army, only to single-handedly rescue his stolen train and true love.",
-          "streams": [
-            {
-              "name": "Archive.org HD MP4",
-              "url": "https://archive.org/download/The_General_Buster_Keaton/The_General.mp4",
-              "quality": "1080p",
-              "format": "mp4"
-            }
-          ],
-          "subtitles": []
-        },
-        {
-          "id": "nosferatu-1922",
-          "title": "Nosferatu",
-          "year": "1922",
-          "poster": "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop",
-          "backdrop": "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1920&auto=format&fit=crop",
-          "badge": "Horror Masterpiece",
-          "rating": 8.0,
-          "rating_text": "8.0",
-          "duration": "1h 34m",
-          "genre": "Horror • German Expressionism",
-          "resolution": "Remastered B&W",
-          "synopsis": "Vampire Count Orlok expresses interest in a new residence and real estate agent Hutter's wife in F.W. Murnau's legendary cinematic milestone.",
-          "streams": [
-            {
-              "name": "Archive.org Master MP4",
-              "url": "https://archive.org/download/nosferatu_1922/nosferatu_1922.mp4",
-              "quality": "1080p",
-              "format": "mp4"
-            },
-            {
-              "name": "Direct MP4",
-              "url": "https://archive.org/download/nosferatu_1922/nosferatu_1922_512kb.mp4",
-              "quality": "480p",
-              "format": "mp4"
-            }
-          ],
-          "subtitles": []
-        },
-        {
-          "id": "carnival-of-souls-1962",
-          "title": "Carnival of Souls",
-          "year": "1962",
-          "poster": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop",
-          "backdrop": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1920&auto=format&fit=crop",
-          "badge": "Cult Mystery",
-          "rating": 7.7,
-          "rating_text": "7.7",
-          "duration": "1h 18m",
-          "genre": "Mystery • Horror",
-          "resolution": "1080p B&W",
-          "synopsis": "After a traumatic car accident, a church organist finds herself drawn toward an abandoned carnival pavilion where ghostly apparitions haunt her every step.",
-          "streams": [
-            {
-              "name": "Archive.org Direct MP4",
-              "url": "https://archive.org/download/carnival_of_souls/carnival_of_souls_512kb.mp4",
-              "quality": "720p",
-              "format": "mp4"
-            }
-          ],
-          "subtitles": []
-        }
-      ]
-    },
-    {
-      "id": "live_tv_free",
-      "name": "📡 Free-to-Air Live TV",
-      "type": "live",
-      "url": "byos-live-tv/manifest.json",
-      "featured": false,
-      "items": [
-        {
-          "id": "nasa-tv-4k",
-          "title": "NASA TV Public HD",
-          "year": "LIVE",
-          "poster": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop",
-          "backdrop": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop",
-          "badge": "LIVE • Free-to-Air",
-          "rating": 9.2,
-          "rating_text": "9.2",
-          "duration": "24/7 Live Stream",
-          "genre": "Science • Space Live",
-          "resolution": "1080p Live HLS",
-          "synopsis": "Official NASA Television broadcast delivering real-time space missions, spacewalks, rocket launches, and educational science programming.",
-          "streams": [
-            {
-              "name": "NASA TV HLS Stream",
-              "url": "https://ntv1.akamaized.net/hls/live/2014075/NASA-NTV1-HLS/master.m3u8",
-              "quality": "1080p",
-              "format": "hls"
-            }
-          ],
-          "subtitles": []
-        },
-        {
-          "id": "dw-english-live",
-          "title": "DW News (English)",
-          "year": "LIVE",
-          "poster": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=600&auto=format&fit=crop",
-          "backdrop": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1920&auto=format&fit=crop",
-          "badge": "LIVE News",
-          "rating": 8.6,
-          "rating_text": "8.6",
-          "duration": "24/7 Live News",
-          "genre": "News • International",
-          "resolution": "1080p Live HLS",
-          "synopsis": "Deutsche Welle international broadcast bringing global breaking news, insightful documentary reports, and current affairs analysis.",
-          "streams": [
-            {
-              "name": "DW News HLS Live",
-              "url": "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8",
-              "quality": "1080p",
-              "format": "hls"
-            }
-          ],
-          "subtitles": []
-        },
-        {
-          "id": "bloomberg-tv-live",
-          "title": "Bloomberg Television",
-          "year": "LIVE",
-          "poster": "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=600&auto=format&fit=crop",
-          "backdrop": "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=1920&auto=format&fit=crop",
-          "badge": "LIVE Financial",
-          "rating": 8.7,
-          "rating_text": "8.7",
-          "duration": "24/7 Live",
-          "genre": "Business • Finance",
-          "resolution": "1080p Live HLS",
-          "synopsis": "World leader in business and financial data, news and research, broadcasting global stock markets, market movements, and leadership interviews.",
-          "streams": [
-            {
-              "name": "Bloomberg HLS Live",
-              "url": "https://bloomberg.com/media-manifest/streams/us.m3u8",
-              "quality": "1080p",
-              "format": "hls"
-            }
-          ],
-          "subtitles": []
-        },
-        {
-          "id": "akamai-live-showcase",
-          "title": "Akamai Live Showcase",
-          "year": "LIVE",
-          "poster": "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?q=80&w=600&auto=format&fit=crop",
-          "backdrop": "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?q=80&w=1920&auto=format&fit=crop",
-          "badge": "HD 60fps Live",
-          "rating": 8.8,
-          "rating_text": "8.8",
-          "duration": "24/7 Stream",
-          "genre": "Entertainment • Tech",
-          "resolution": "1080p Live HLS",
-          "synopsis": "Ultra low latency continuous high-definition broadcast feed demonstrating multi-bitrate HLS streaming.",
-          "streams": [
-            {
-              "name": "Akamai HD Stream",
-              "url": "https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8",
-              "quality": "1080p",
-              "format": "hls"
-            }
-          ],
-          "subtitles": []
-        }
-      ]
-    },
     {
       "id": "open_movies_4k",
       "name": "🔥 4K Open Source Masterpieces",
@@ -532,119 +289,6 @@
               "url": "https://archive.org/download/Tears-of-Steel/tears_of_steel_1080p.mp4",
               "quality": "1080p",
               "format": "mp4"
-            }
-          ],
-          "subtitles": []
-        }
-      ]
-    },
-    {
-      "id": "theater_trailers",
-      "name": "🎬 In Theaters & 4K Trailers",
-      "type": "trailer",
-      "url": "byos-trailers/manifest.json",
-      "featured": false,
-      "items": [
-        {
-          "id": "trailer-avatar-fire-ash",
-          "title": "Avatar: Fire and Ash",
-          "year": "2025",
-          "poster": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop",
-          "backdrop": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1920&auto=format&fit=crop",
-          "badge": "4K HDR Cinema Trailer",
-          "rating": 8.9,
-          "rating_text": "8.9",
-          "duration": "2m 35s",
-          "genre": "Sci-Fi • Adventure",
-          "resolution": "4K 60fps",
-          "synopsis": "The third installment of James Cameron's legendary saga exploring the aggressive Ash People of Pandora across volcanic landscapes.",
-          "streams": [
-            {
-              "name": "HLS Multi-Bitrate Master",
-              "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-              "quality": "2160p",
-              "format": "hls"
-            },
-            {
-              "name": "Direct 1080p MP4",
-              "url": "https://archive.org/download/Tears-of-Steel/tears_of_steel_1080p.mp4",
-              "quality": "1080p",
-              "format": "mp4"
-            }
-          ],
-          "subtitles": []
-        },
-        {
-          "id": "trailer-dune-two",
-          "title": "Dune: Part Two",
-          "year": "2024",
-          "poster": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=600&auto=format&fit=crop",
-          "backdrop": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=1920&auto=format&fit=crop",
-          "badge": "IMAX 4K",
-          "rating": 8.6,
-          "rating_text": "8.6",
-          "duration": "3m 02s",
-          "genre": "Sci-Fi • Epic",
-          "resolution": "4K IMAX",
-          "synopsis": "Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.",
-          "streams": [
-            {
-              "name": "Direct 1080p Master",
-              "url": "https://archive.org/download/Tears-of-Steel/tears_of_steel_1080p.mp4",
-              "quality": "1080p",
-              "format": "mp4"
-            },
-            {
-              "name": "HLS Multi-Bitrate Stream",
-              "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-              "quality": "1080p",
-              "format": "hls"
-            }
-          ],
-          "subtitles": []
-        },
-        {
-          "id": "trailer-oppenheimer",
-          "title": "Oppenheimer",
-          "year": "2023",
-          "poster": "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=600&auto=format&fit=crop",
-          "backdrop": "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1920&auto=format&fit=crop",
-          "badge": "Oscar Winner",
-          "rating": 8.9,
-          "rating_text": "8.9",
-          "duration": "3m 15s",
-          "genre": "Biography • Drama",
-          "resolution": "4K Ultra HD",
-          "synopsis": "The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb during World War II.",
-          "streams": [
-            {
-              "name": "4K Master Surround MP4",
-              "url": "https://archive.org/download/Sintel/sintel-2048-surround.mp4",
-              "quality": "2160p",
-              "format": "mp4"
-            }
-          ],
-          "subtitles": []
-        },
-        {
-          "id": "trailer-streaming-showcase",
-          "title": "Universal HLS Showcase",
-          "year": "2024",
-          "poster": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
-          "backdrop": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop",
-          "badge": "Apple fMP4 HLS",
-          "rating": 9.0,
-          "rating_text": "9.0",
-          "duration": "3m 40s",
-          "genre": "Tech • Showcase",
-          "resolution": "1080p fMP4",
-          "synopsis": "Next-generation fragmented MP4 HLS multi-audio and closed-caption streaming test reel.",
-          "streams": [
-            {
-              "name": "Apple fMP4 HLS Stream",
-              "url": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
-              "quality": "1080p",
-              "format": "hls"
             }
           ],
           "subtitles": []
@@ -2480,6 +2124,362 @@
             {
               "name": "Đồng Tháp TV2 HLS Primary",
               "url": "https://618b88f69e53b.streamlock.net/THDT2/thdttv2/chunklist.m3u8",
+              "quality": "1080p",
+              "format": "hls"
+            }
+          ],
+          "subtitles": []
+        }
+      ]
+    },
+    {
+      "id": "live_tv_free",
+      "name": "📡 Free-to-Air Live TV",
+      "type": "live",
+      "url": "byos-live-tv/manifest.json",
+      "featured": false,
+      "items": [
+        {
+          "id": "nasa-tv-4k",
+          "title": "NASA TV Public HD",
+          "year": "LIVE",
+          "poster": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop",
+          "backdrop": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop",
+          "badge": "LIVE • Free-to-Air",
+          "rating": 9.2,
+          "rating_text": "9.2",
+          "duration": "24/7 Live Stream",
+          "genre": "Science • Space Live",
+          "resolution": "1080p Live HLS",
+          "synopsis": "Official NASA Television broadcast delivering real-time space missions, spacewalks, rocket launches, and educational science programming.",
+          "streams": [
+            {
+              "name": "NASA TV HLS Stream",
+              "url": "https://ntv1.akamaized.net/hls/live/2014075/NASA-NTV1-HLS/master.m3u8",
+              "quality": "1080p",
+              "format": "hls"
+            }
+          ],
+          "subtitles": []
+        },
+        {
+          "id": "dw-english-live",
+          "title": "DW News (English)",
+          "year": "LIVE",
+          "poster": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=600&auto=format&fit=crop",
+          "backdrop": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1920&auto=format&fit=crop",
+          "badge": "LIVE News",
+          "rating": 8.6,
+          "rating_text": "8.6",
+          "duration": "24/7 Live News",
+          "genre": "News • International",
+          "resolution": "1080p Live HLS",
+          "synopsis": "Deutsche Welle international broadcast bringing global breaking news, insightful documentary reports, and current affairs analysis.",
+          "streams": [
+            {
+              "name": "DW News HLS Live",
+              "url": "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8",
+              "quality": "1080p",
+              "format": "hls"
+            }
+          ],
+          "subtitles": []
+        },
+        {
+          "id": "bloomberg-tv-live",
+          "title": "Bloomberg Television",
+          "year": "LIVE",
+          "poster": "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=600&auto=format&fit=crop",
+          "backdrop": "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=1920&auto=format&fit=crop",
+          "badge": "LIVE Financial",
+          "rating": 8.7,
+          "rating_text": "8.7",
+          "duration": "24/7 Live",
+          "genre": "Business • Finance",
+          "resolution": "1080p Live HLS",
+          "synopsis": "World leader in business and financial data, news and research, broadcasting global stock markets, market movements, and leadership interviews.",
+          "streams": [
+            {
+              "name": "Bloomberg HLS Live",
+              "url": "https://bloomberg.com/media-manifest/streams/us.m3u8",
+              "quality": "1080p",
+              "format": "hls"
+            }
+          ],
+          "subtitles": []
+        },
+        {
+          "id": "akamai-live-showcase",
+          "title": "Akamai Live Showcase",
+          "year": "LIVE",
+          "poster": "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?q=80&w=600&auto=format&fit=crop",
+          "backdrop": "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?q=80&w=1920&auto=format&fit=crop",
+          "badge": "HD 60fps Live",
+          "rating": 8.8,
+          "rating_text": "8.8",
+          "duration": "24/7 Stream",
+          "genre": "Entertainment • Tech",
+          "resolution": "1080p Live HLS",
+          "synopsis": "Ultra low latency continuous high-definition broadcast feed demonstrating multi-bitrate HLS streaming.",
+          "streams": [
+            {
+              "name": "Akamai HD Stream",
+              "url": "https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8",
+              "quality": "1080p",
+              "format": "hls"
+            }
+          ],
+          "subtitles": []
+        }
+      ]
+    },
+    {
+      "id": "classic_cinema",
+      "name": "🍿 Timeless Public Domain Cinema",
+      "type": "movie",
+      "url": "byos-classic-cinema/manifest.json",
+      "featured": false,
+      "items": [
+        {
+          "id": "charade-1963",
+          "title": "Charade",
+          "year": "1963",
+          "poster": "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop",
+          "backdrop": "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1920&auto=format&fit=crop",
+          "badge": "4K Color • Classic",
+          "rating": 8.5,
+          "rating_text": "8.5",
+          "duration": "1h 53m",
+          "genre": "Mystery • Thriller",
+          "resolution": "4K Remastered",
+          "synopsis": "Audrey Hepburn and Cary Grant star in a fast-paced Parisian romantic mystery filled with twists, stolen fortunes, and espionage.",
+          "streams": [
+            {
+              "name": "HLS Multi-Bitrate Master",
+              "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+              "quality": "1080p",
+              "format": "hls"
+            },
+            {
+              "name": "Direct Stream Sample",
+              "url": "https://archive.org/download/his_girl_friday/his_girl_friday.mp4",
+              "quality": "1080p",
+              "format": "mp4"
+            }
+          ],
+          "subtitles": []
+        },
+        {
+          "id": "his-girl-friday-1940",
+          "title": "His Girl Friday",
+          "year": "1940",
+          "poster": "https://images.unsplash.com/photo-1509281373149-e957c6296406?q=80&w=600&auto=format&fit=crop",
+          "backdrop": "https://images.unsplash.com/photo-1509281373149-e957c6296406?q=80&w=1920&auto=format&fit=crop",
+          "badge": "Screwball Comedy",
+          "rating": 8.9,
+          "rating_text": "8.9",
+          "duration": "1h 32m",
+          "genre": "Comedy • Romance",
+          "resolution": "Remastered HD",
+          "synopsis": "A hard-charging newspaper editor uses every trick in the book to keep his top investigative reporter ex-wife from remarrying and leaving her career behind.",
+          "streams": [
+            {
+              "name": "Archive.org Master MP4",
+              "url": "https://archive.org/download/his_girl_friday/his_girl_friday.mp4",
+              "quality": "1080p",
+              "format": "mp4"
+            },
+            {
+              "name": "Archive.org Direct MP4",
+              "url": "https://archive.org/download/his_girl_friday/his_girl_friday_512kb.mp4",
+              "quality": "480p",
+              "format": "mp4"
+            }
+          ],
+          "subtitles": []
+        },
+        {
+          "id": "the-general-1926",
+          "title": "The General",
+          "year": "1926",
+          "poster": "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=600&auto=format&fit=crop",
+          "backdrop": "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1920&auto=format&fit=crop",
+          "badge": "Buster Keaton Masterpiece",
+          "rating": 8.1,
+          "rating_text": "8.1",
+          "duration": "1h 15m",
+          "genre": "Action • Comedy",
+          "resolution": "Remastered HD",
+          "synopsis": "During the American Civil War, locomotive engineer Johnnie Gray is rejected by the army, only to single-handedly rescue his stolen train and true love.",
+          "streams": [
+            {
+              "name": "Archive.org HD MP4",
+              "url": "https://archive.org/download/The_General_Buster_Keaton/The_General.mp4",
+              "quality": "1080p",
+              "format": "mp4"
+            }
+          ],
+          "subtitles": []
+        },
+        {
+          "id": "nosferatu-1922",
+          "title": "Nosferatu",
+          "year": "1922",
+          "poster": "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop",
+          "backdrop": "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1920&auto=format&fit=crop",
+          "badge": "Horror Masterpiece",
+          "rating": 8.0,
+          "rating_text": "8.0",
+          "duration": "1h 34m",
+          "genre": "Horror • German Expressionism",
+          "resolution": "Remastered B&W",
+          "synopsis": "Vampire Count Orlok expresses interest in a new residence and real estate agent Hutter's wife in F.W. Murnau's legendary cinematic milestone.",
+          "streams": [
+            {
+              "name": "Archive.org Master MP4",
+              "url": "https://archive.org/download/nosferatu_1922/nosferatu_1922.mp4",
+              "quality": "1080p",
+              "format": "mp4"
+            },
+            {
+              "name": "Direct MP4",
+              "url": "https://archive.org/download/nosferatu_1922/nosferatu_1922_512kb.mp4",
+              "quality": "480p",
+              "format": "mp4"
+            }
+          ],
+          "subtitles": []
+        },
+        {
+          "id": "carnival-of-souls-1962",
+          "title": "Carnival of Souls",
+          "year": "1962",
+          "poster": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop",
+          "backdrop": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1920&auto=format&fit=crop",
+          "badge": "Cult Mystery",
+          "rating": 7.7,
+          "rating_text": "7.7",
+          "duration": "1h 18m",
+          "genre": "Mystery • Horror",
+          "resolution": "1080p B&W",
+          "synopsis": "After a traumatic car accident, a church organist finds herself drawn toward an abandoned carnival pavilion where ghostly apparitions haunt her every step.",
+          "streams": [
+            {
+              "name": "Archive.org Direct MP4",
+              "url": "https://archive.org/download/carnival_of_souls/carnival_of_souls_512kb.mp4",
+              "quality": "720p",
+              "format": "mp4"
+            }
+          ],
+          "subtitles": []
+        }
+      ]
+    },
+    {
+      "id": "theater_trailers",
+      "name": "🎬 In Theaters & 4K Trailers",
+      "type": "trailer",
+      "url": "byos-trailers/manifest.json",
+      "featured": false,
+      "items": [
+        {
+          "id": "trailer-avatar-fire-ash",
+          "title": "Avatar: Fire and Ash",
+          "year": "2025",
+          "poster": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop",
+          "backdrop": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1920&auto=format&fit=crop",
+          "badge": "4K HDR Cinema Trailer",
+          "rating": 8.9,
+          "rating_text": "8.9",
+          "duration": "2m 35s",
+          "genre": "Sci-Fi • Adventure",
+          "resolution": "4K 60fps",
+          "synopsis": "The third installment of James Cameron's legendary saga exploring the aggressive Ash People of Pandora across volcanic landscapes.",
+          "streams": [
+            {
+              "name": "HLS Multi-Bitrate Master",
+              "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+              "quality": "2160p",
+              "format": "hls"
+            },
+            {
+              "name": "Direct 1080p MP4",
+              "url": "https://archive.org/download/Tears-of-Steel/tears_of_steel_1080p.mp4",
+              "quality": "1080p",
+              "format": "mp4"
+            }
+          ],
+          "subtitles": []
+        },
+        {
+          "id": "trailer-dune-two",
+          "title": "Dune: Part Two",
+          "year": "2024",
+          "poster": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=600&auto=format&fit=crop",
+          "backdrop": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=1920&auto=format&fit=crop",
+          "badge": "IMAX 4K",
+          "rating": 8.6,
+          "rating_text": "8.6",
+          "duration": "3m 02s",
+          "genre": "Sci-Fi • Epic",
+          "resolution": "4K IMAX",
+          "synopsis": "Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.",
+          "streams": [
+            {
+              "name": "Direct 1080p Master",
+              "url": "https://archive.org/download/Tears-of-Steel/tears_of_steel_1080p.mp4",
+              "quality": "1080p",
+              "format": "mp4"
+            },
+            {
+              "name": "HLS Multi-Bitrate Stream",
+              "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+              "quality": "1080p",
+              "format": "hls"
+            }
+          ],
+          "subtitles": []
+        },
+        {
+          "id": "trailer-oppenheimer",
+          "title": "Oppenheimer",
+          "year": "2023",
+          "poster": "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=600&auto=format&fit=crop",
+          "backdrop": "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1920&auto=format&fit=crop",
+          "badge": "Oscar Winner",
+          "rating": 8.9,
+          "rating_text": "8.9",
+          "duration": "3m 15s",
+          "genre": "Biography • Drama",
+          "resolution": "4K Ultra HD",
+          "synopsis": "The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb during World War II.",
+          "streams": [
+            {
+              "name": "4K Master Surround MP4",
+              "url": "https://archive.org/download/Sintel/sintel-2048-surround.mp4",
+              "quality": "2160p",
+              "format": "mp4"
+            }
+          ],
+          "subtitles": []
+        },
+        {
+          "id": "trailer-streaming-showcase",
+          "title": "Universal HLS Showcase",
+          "year": "2024",
+          "poster": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
+          "backdrop": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop",
+          "badge": "Apple fMP4 HLS",
+          "rating": 9.0,
+          "rating_text": "9.0",
+          "duration": "3m 40s",
+          "genre": "Tech • Showcase",
+          "resolution": "1080p fMP4",
+          "synopsis": "Next-generation fragmented MP4 HLS multi-audio and closed-caption streaming test reel.",
+          "streams": [
+            {
+              "name": "Apple fMP4 HLS Stream",
+              "url": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
               "quality": "1080p",
               "format": "hls"
             }
