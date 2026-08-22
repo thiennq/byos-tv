@@ -1,0 +1,142 @@
+{
+  "id": "classic_cinema",
+  "name": "🍿 Timeless Public Domain Cinema",
+  "type": "movie",
+  "url": "classic-movies.json",
+  "featured": false,
+  "items": [
+    {
+      "id": "charade-1963",
+      "title": "Charade",
+      "year": "1963",
+      "poster": "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop",
+      "backdrop": "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1920&auto=format&fit=crop",
+      "badge": "4K Color • Classic",
+      "rating": 8.5,
+      "rating_text": "8.5",
+      "duration": "1h 53m",
+      "genre": "Mystery • Thriller",
+      "resolution": "4K Remastered",
+      "synopsis": "Audrey Hepburn and Cary Grant star in a fast-paced Parisian romantic mystery filled with twists, stolen fortunes, and espionage.",
+      "streams": [
+        {
+          "name": "HLS Multi-Bitrate Master",
+          "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+          "quality": "1080p",
+          "format": "hls"
+        },
+        {
+          "name": "Direct Stream Sample",
+          "url": "https://archive.org/download/his_girl_friday/his_girl_friday.mp4",
+          "quality": "1080p",
+          "format": "mp4"
+        }
+      ],
+      "subtitles": []
+    },
+    {
+      "id": "his-girl-friday-1940",
+      "title": "His Girl Friday",
+      "year": "1940",
+      "poster": "https://images.unsplash.com/photo-1509281373149-e957c6296406?q=80&w=600&auto=format&fit=crop",
+      "backdrop": "https://images.unsplash.com/photo-1509281373149-e957c6296406?q=80&w=1920&auto=format&fit=crop",
+      "badge": "Screwball Comedy",
+      "rating": 8.9,
+      "rating_text": "8.9",
+      "duration": "1h 32m",
+      "genre": "Comedy • Romance",
+      "resolution": "Remastered HD",
+      "synopsis": "A hard-charging newspaper editor uses every trick in the book to keep his top investigative reporter ex-wife from remarrying and leaving her career behind.",
+      "streams": [
+        {
+          "name": "Archive.org Master MP4",
+          "url": "https://archive.org/download/his_girl_friday/his_girl_friday.mp4",
+          "quality": "1080p",
+          "format": "mp4"
+        },
+        {
+          "name": "Archive.org Direct MP4",
+          "url": "https://archive.org/download/his_girl_friday/his_girl_friday_512kb.mp4",
+          "quality": "480p",
+          "format": "mp4"
+        }
+      ],
+      "subtitles": []
+    },
+    {
+      "id": "the-general-1926",
+      "title": "The General",
+      "year": "1926",
+      "poster": "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=600&auto=format&fit=crop",
+      "backdrop": "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1920&auto=format&fit=crop",
+      "badge": "Buster Keaton Masterpiece",
+      "rating": 8.1,
+      "rating_text": "8.1",
+      "duration": "1h 15m",
+      "genre": "Action • Comedy",
+      "resolution": "Remastered HD",
+      "synopsis": "During the American Civil War, locomotive engineer Johnnie Gray is rejected by the army, only to single-handedly rescue his stolen train and true love.",
+      "streams": [
+        {
+          "name": "Archive.org HD MP4",
+          "url": "https://archive.org/download/The_General_Buster_Keaton/The_General.mp4",
+          "quality": "1080p",
+          "format": "mp4"
+        }
+      ],
+      "subtitles": []
+    },
+    {
+      "id": "nosferatu-1922",
+      "title": "Nosferatu",
+      "year": "1922",
+      "poster": "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop",
+      "backdrop": "https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1920&auto=format&fit=crop",
+      "badge": "Horror Masterpiece",
+      "rating": 8.0,
+      "rating_text": "8.0",
+      "duration": "1h 34m",
+      "genre": "Horror • German Expressionism",
+      "resolution": "Remastered B&W",
+      "synopsis": "Vampire Count Orlok expresses interest in a new residence and real estate agent Hutter's wife in F.W. Murnau's legendary cinematic milestone.",
+      "streams": [
+        {
+          "name": "Archive.org Master MP4",
+          "url": "https://archive.org/download/nosferatu_1922/nosferatu_1922.mp4",
+          "quality": "1080p",
+          "format": "mp4"
+        },
+        {
+          "name": "Direct MP4",
+          "url": "https://archive.org/download/nosferatu_1922/nosferatu_1922_512kb.mp4",
+          "quality": "480p",
+          "format": "mp4"
+        }
+      ],
+      "subtitles": []
+    },
+    {
+      "id": "carnival-of-souls-1962",
+      "title": "Carnival of Souls",
+      "year": "1962",
+      "poster": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop",
+      "backdrop": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1920&auto=format&fit=crop",
+      "badge": "Cult Mystery",
+      "rating": 7.7,
+      "rating_text": "7.7",
+      "duration": "1h 18m",
+      "genre": "Mystery • Horror",
+      "resolution": "1080p B&W",
+      "synopsis": "After a traumatic car accident, a church organist finds herself drawn toward an abandoned carnival pavilion where ghostly apparitions haunt her every step.",
+      "streams": [
+        {
+          "name": "Archive.org Direct MP4",
+          "url": "https://archive.org/download/carnival_of_souls/carnival_of_souls_512kb.mp4",
+          "quality": "720p",
+          "format": "mp4"
+        }
+      ],
+      "subtitles": []
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "id": "theater_trailers",
+  "name": "🎬 In Theaters & 4K Trailers",
+  "type": "trailer",
+  "url": "byos-trailers/manifest.json",
+  "featured": false,
+  "items": [
+    {
+      "id": "trailer-avatar-fire-ash",
+      "title": "Avatar: Fire and Ash",
+      "year": "2025",
+      "poster": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop",
+      "backdrop": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1920&auto=format&fit=crop",
+      "badge": "4K HDR Cinema Trailer",
+      "rating": 8.9,
+      "rating_text": "8.9",
+      "duration": "2m 35s",
+      "genre": "Sci-Fi • Adventure",
+      "resolution": "4K 60fps",
+      "synopsis": "The third installment of James Cameron's legendary saga exploring the aggressive Ash People of Pandora across volcanic landscapes.",
+      "streams": [
+        {
+          "name": "HLS Multi-Bitrate Master",
+          "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+          "quality": "2160p",
+          "format": "hls"
+        },
+        {
+          "name": "Direct 1080p MP4",
+          "url": "https://archive.org/download/Tears-of-Steel/tears_of_steel_1080p.mp4",
+          "quality": "1080p",
+          "format": "mp4"
+        }
+      ],
+      "subtitles": []
+    },
+    {
+      "id": "trailer-dune-two",
+      "title": "Dune: Part Two",
+      "year": "2024",
+      "poster": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=600&auto=format&fit=crop",
+      "backdrop": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=1920&auto=format&fit=crop",
+      "badge": "IMAX 4K",
+      "rating": 8.6,
+      "rating_text": "8.6",
+      "duration": "3m 02s",
+      "genre": "Sci-Fi • Epic",
+      "resolution": "4K IMAX",
+      "synopsis": "Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.",
+      "streams": [
+        {
+          "name": "Direct 1080p Master",
+          "url": "https://archive.org/download/Tears-of-Steel/tears_of_steel_1080p.mp4",
+          "quality": "1080p",
+          "format": "mp4"
+        },
+        {
+          "name": "HLS Multi-Bitrate Stream",
+          "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+          "quality": "1080p",
+          "format": "hls"
+        }
+      ],
+      "subtitles": []
+    },
+    {
+      "id": "trailer-oppenheimer",
+      "title": "Oppenheimer",
+      "year": "2023",
+      "poster": "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=600&auto=format&fit=crop",
+      "backdrop": "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1920&auto=format&fit=crop",
+      "badge": "Oscar Winner",
+      "rating": 8.9,
+      "rating_text": "8.9",
+      "duration": "3m 15s",
+      "genre": "Biography • Drama",
+      "resolution": "4K Ultra HD",
+      "synopsis": "The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb during World War II.",
+      "streams": [
+        {
+          "name": "4K Master Surround MP4",
+          "url": "https://archive.org/download/Sintel/sintel-2048-surround.mp4",
+          "quality": "2160p",
+          "format": "mp4"
+        }
+      ],
+      "subtitles": []
+    },
+    {
+      "id": "trailer-streaming-showcase",
+      "title": "Universal HLS Showcase",
+      "year": "2024",
+      "poster": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
+      "backdrop": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop",
+      "badge": "Apple fMP4 HLS",
+      "rating": 9.0,
+      "rating_text": "9.0",
+      "duration": "3m 40s",
+      "genre": "Tech • Showcase",
+      "resolution": "1080p fMP4",
+      "synopsis": "Next-generation fragmented MP4 HLS multi-audio and closed-caption streaming test reel.",
+      "streams": [
+        {
+          "name": "Apple fMP4 HLS Stream",
+          "url": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
+          "quality": "1080p",
+          "format": "hls"
+        }
+      ],
+      "subtitles": []
+    }
+  ]
+}

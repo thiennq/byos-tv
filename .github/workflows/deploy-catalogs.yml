@@ -1,0 +1,76 @@
+name: Deploy BYOS Catalogs to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'catalogs/**'
+      - 'scripts/catalog_validator.py'
+      - '.github/workflows/deploy-catalogs.yml'
+  schedule:
+    # Daily stream health check & auto-cleaning at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  validate-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: false
+
+      - name: Validate Catalogs and Probe Media Streams
+        run: |
+          python3 scripts/catalog_validator.py \
+            --input catalogs/sources/ \
+            --output dist/ \
+            --check-streams \
+            --filter-dead \
+            --distribution \
+            --minify \
+            --timeout 8.0 \
+            --workers 12
+
+      - name: Verify Build Artifacts
+        run: |
+          echo "=== Distribution Build Tree ==="
+          ls -la dist/
+          echo "=== Root Manifest Index Head ==="
+          cat dist/index.json | head -c 200
+          echo ""
+          echo "=== Checksums ==="
+          cat dist/manifest.sha256
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/
+
+      - name: Deploy to GitHub Pages CDN
+        id: deployment
+        uses: actions/deploy-pages@v4
