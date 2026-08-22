@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-08-22T20:46:55Z",
+  "updated_at": "2026-08-22T20:47:44Z",
   "catalogs": [
     {
       "id": "classic_cinema",
@@ -656,7 +656,7 @@
       "name": "🇻🇳 Truyền Hình Việt Nam (Live IPTV)",
       "type": "live",
       "url": "byos-vietnam-iptv/manifest.json",
-      "featured": true,
+      "featured": false,
       "items": [
         {
           "id": "vn-vtv1",

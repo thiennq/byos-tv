@@ -3,7 +3,7 @@
   "name": "🇻🇳 Truyền Hình Việt Nam (Live IPTV)",
   "type": "live",
   "url": "byos-vietnam-iptv/manifest.json",
-  "featured": true,
+  "featured": false,
   "items": [
     {
       "id": "vn-vtv1",
