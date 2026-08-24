@@ -5,7 +5,33 @@
 ---
 
 ## 🌟 Overview
-**BYOS IPTV Live Streamer** là plugin chính thức dành cho BYOS TV, cho phép người dùng xem truyền hình trực tuyến Live TV đa nguồn (VTV, HTV, SCTV, THVL, Thể thao, Tin tức quốc tế và các luồng tùy biến) với chi phí máy chủ **$0 Server** (chạy native bằng QuickJS C++ ES2023 trên thiết bị).
+**BYOS IPTV Live Streamer** là plugin chính thức dành cho BYOS TV, cho phép người dùng xem truyền hình trực tuyến Live TV đa nguồn (VTV, HTV, SCTV, THVL, Thể thao, Tin tức quốc tế và 240+ quốc gia) với chi phí máy chủ **$0 Server** (chạy native bằng QuickJS C++ ES2023 trên thiết bị).
+
+---
+
+## 🚀 Kiến Trúc & Tính Năng Nổi Bật (Architecture & Key Highlights)
+
+1. **Static Countries Asset (`countries.json`) & Offline 0ms**:
+   - Nhúng sẵn danh mục 240+ quốc gia kèm mã ISO chuẩn và cờ emoji.
+   - Nạp siêu tốc 0ms offline thông qua Native Asset Reader `byos.readAsset('countries.json')`.
+
+2. **Dynamic Cascading Form Builder (`country` $\rightarrow$ `selected_channels`)**:
+   - Khai báo declarative dynamic hooks trong `manifest.json` (`dynamicHook: "getCountries"`, `dynamicHook: "getChannelsByCountry"`, `dependsOn: "country"`).
+   - Khi chọn quốc gia, hệ thống tự động tải playlist tương ứng từ kho iptv-org, parse danh sách kênh và lưu vào `byos.storage`.
+   - Tìm kiếm kênh realtime mượt mà qua D-Pad / Voice Search trên TV.
+
+3. **0ms Instant Direct Playback**:
+   - Người dùng tick chọn các kênh yêu thích $\rightarrow$ Toàn bộ thông tin kênh (ID, Tên, Logo, Stream URL) được lưu trực tiếp vào `settings.json`.
+   - Khi mở TV, `getChannels()` và `getStreams()` trả về luồng phát trực tiếp ngay lập tức mà không tốn round-trip mạng để tải lại file M3U.
+
+4. **Isolated Caching với `byos.storage`**:
+   - Tự động cache danh sách kênh sau khi parse vào storage sandbox của plugin.
+   - Hỗ trợ cấu hình TTL tự động làm mới (`auto_reload_hours`).
+
+5. **Nâng Cấp Bộ Phân Tích M3U (Robust Parser)**:
+   - Xử lý triệt để ký tự UTF-8 BOM (`\uFEFF`).
+   - Trích xuất tự động custom HTTP headers từ `#EXTVLCOPT` (`User-Agent`, `Referer`, `Origin`), `#EXTHTTP` (JSON), và URL pipe parameters (`url|Header=Value`).
+   - Giới hạn an toàn `MAX_CHANNELS_PER_SOURCE = 1000` bảo vệ bộ nhớ RAM trên Android TV.
 
 ---
 
@@ -28,16 +54,15 @@
 
 ## ⚙️ Plugin Configuration (Cấu Hình Nguồn Phát)
 Sau khi cài đặt, bạn có thể bấm nút **"⚙️ Cài Đặt"** trên TV hoặc qua Web Dashboard:
-- **Tự động làm mới danh mục**: Hỗ trợ tự động cập nhật luồng sau mỗi 6 tiếng, 24 tiếng.
-- **Nguồn có sẵn (Built-in Presets)**:
-  - 🇻🇳 **IPTV.org - Kênh Quốc Gia Việt Nam** (VTV1, VTV2, VTV3, HTV, VTC...)
-  - ⚽ **IPTV.org - Kênh Thể Thao Quốc Tế** (Sports 24/7)
-  - 📰 **IPTV.org - Kênh Tin Tức Quốc Tế** (News Live)
-- **Nguồn tùy biến (Custom M3U / M3U8 URLs)**:
-  - Dễ dàng nhập tên nguồn và link playlist `.m3u` riêng của bạn.
+- **Chọn Quốc Gia**: Chọn từ 240+ quốc gia (Việt Nam 🇻🇳, Mỹ 🇺🇸, Anh 🇬🇧, Nhật Bản 🇯🇵, Hàn Quốc 🇰🇷, Pháp 🇫🇷...).
+- **Danh Sách Kênh Muốn Phát**: Tìm kiếm và tick chọn các kênh yêu thích để đưa ra màn hình Live TV.
+- **Tự động làm mới danh mục**: Hỗ trợ tự động cập nhật luồng sau mỗi 6 tiếng, 24 tiếng, hoặc không tự động làm mới.
+- **Nguồn tùy biến thêm (Custom M3U / M3U8 URLs)**: Nhập thêm các playlist `.m3u` riêng của bạn nếu có.
 
 ---
 
 ## 📁 Repository Files
-- `manifest.json`: Manifest định nghĩa plugin repository & Form Schema UI.
-- `iptv_plugin.js`: Source code plugin JavaScript ES2023 xử lý parse M3U và trích xuất luồng Live HLS.
+- `manifest.json`: Manifest định nghĩa plugin repository, assets và Dynamic Form Schema UI.
+- `iptv_plugin.js`: Source code plugin JavaScript ES2023 xử lý Dynamic Hooks, parse M3U và trích xuất luồng Live HLS.
+- `countries.json`: Danh mục 240+ quốc gia tĩnh kèm emoji flag.
+- `README.md`: Hướng dẫn sử dụng & kiến trúc plugin.

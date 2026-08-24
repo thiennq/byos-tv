@@ -1,7 +1,7 @@
 {
   "id": "byos-iptv-repo",
   "name": "BYOS Official IPTV Hub",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Kho kênh truyền hình trực tuyến Live TV đa nguồn và tự động giải mã",
   "author": "BYOS Ecosystem",
   "manifestUrl": "https://thiennq.github.io/byos-tv/plugins/byos-iptv/manifest.json",
@@ -9,17 +9,35 @@
     {
       "id": "byos.plugin.iptv",
       "name": "IPTV Live Streamer",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "BYOS Ecosystem",
-      "description": "Trình phát Live TV đa nguồn hỗ trợ danh mục IPTV.org & Custom M3U/M3U8",
+      "description": "Trình phát Live TV đa nguồn hỗ trợ 240+ quốc gia và lọc kênh tức thì 0ms",
       "scriptUrl": "https://thiennq.github.io/byos-tv/plugins/byos-iptv/iptv_plugin.js",
+      "assets": ["countries.json"],
       "supportedMedia": ["live_tv"],
       "enabled": true,
       "protocol": "byos",
       "formSchema": {
         "title": "Cấu Hình Danh Sách Kênh Live TV",
-        "description": "Quản lý nguồn phát truyền hình trực tuyến và làm mới danh sách kênh",
+        "description": "Chọn quốc gia và các kênh truyền hình muốn phát trực tiếp",
         "fields": [
+          {
+            "key": "country",
+            "label": "Chọn Quốc Gia",
+            "type": "select",
+            "searchable": true,
+            "default": "vn",
+            "dynamicHook": "getCountries"
+          },
+          {
+            "key": "selected_channels",
+            "label": "Danh Sách Kênh Muốn Phát",
+            "type": "multi_select",
+            "searchable": true,
+            "dependsOn": "country",
+            "dynamicHook": "getChannelsByCountry",
+            "placeholder": "Gõ tìm kiếm kênh (VD: VTV, HTV, Thể thao)..."
+          },
           {
             "key": "auto_reload_hours",
             "label": "Tự động làm mới danh mục (giờ)",
@@ -33,46 +51,16 @@
           },
           {
             "key": "sources",
-            "label": "Danh Sách Nguồn Kênh",
+            "label": "Nguồn Kênh Tùy Biến Thêm (Custom M3U)",
             "type": "list",
             "itemTitle": "{name}",
-            "default": [
-              {
-                "name": "IPTV.org Vietnam",
-                "source_type": "builtin",
-                "preset_id": "iptv_org_vn",
-                "enabled": true
-              }
-            ],
+            "default": [],
             "itemSchema": [
-              {
-                "key": "source_type",
-                "label": "Loại Nguồn",
-                "type": "select",
-                "default": "builtin",
-                "options": [
-                  { "label": "Nguồn có sẵn (Built-in Presets)", "value": "builtin" },
-                  { "label": "Tùy biến (Custom M3U URL)", "value": "custom" }
-                ]
-              },
-              {
-                "key": "preset_id",
-                "label": "Chọn Danh Mục Có Sẵn",
-                "type": "select",
-                "condition": { "field": "source_type", "equals": "builtin" },
-                "default": "iptv_org_vn",
-                "options": [
-                  { "label": "IPTV.org - Kênh Quốc Gia Việt Nam", "value": "iptv_org_vn" },
-                  { "label": "IPTV.org - Kênh Thể Thao Quốc Tế", "value": "iptv_org_sports" },
-                  { "label": "IPTV.org - Kênh Tin Tức 24/7", "value": "iptv_org_news" }
-                ]
-              },
               {
                 "key": "name",
                 "label": "Tên Nguồn",
                 "type": "text",
                 "placeholder": "VD: K+ Nhà Mạng",
-                "condition": { "field": "source_type", "equals": "custom" },
                 "required": true
               },
               {
@@ -80,7 +68,6 @@
                 "label": "Đường Dẫn M3U / M3U8",
                 "type": "url",
                 "placeholder": "https://example.com/playlist.m3u",
-                "condition": { "field": "source_type", "equals": "custom" },
                 "required": true
               },
               {

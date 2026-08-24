@@ -1,242 +1,635 @@
 /**
  * BYOS Universal Plugin: IPTV Live Streamer
- * Version: 1.0.0
+ * Version: 1.1.0
  * Protocol: BYOS Universal JS ES2023 ($0 Server)
- * Description: Trình phát Live TV đa nguồn hỗ trợ IPTV.org và custom M3U/M3U8 playlists.
+ * Description: High-performance Live TV streamer with 240+ countries asset, dynamic channel builder, and 0ms direct playback.
  */
 
-var PRESET_URLS = {
+const MAX_CHANNELS_PER_SOURCE = 1000;
+const CACHE_STORAGE_KEY = "byos_iptv_cache";
+const DEFAULT_AUTO_RELOAD_HOURS = 24;
+
+const PRESET_URLS = {
   iptv_org_vn: "https://raw.githubusercontent.com/iptv-org/iptv/master/streams/vn.m3u",
   iptv_org_sports: "https://raw.githubusercontent.com/iptv-org/iptv/master/streams/sports.m3u",
   iptv_org_news: "https://raw.githubusercontent.com/iptv-org/iptv/master/streams/news.m3u"
 };
 
-var DEFAULT_SOURCES = [
-  {
-    name: "IPTV.org Vietnam",
-    source_type: "builtin",
-    preset_id: "iptv_org_vn",
-    enabled: true
-  }
-];
+/**
+ * Normalizes HTTP header keys (e.g. user-agent -> User-Agent)
+ */
+function normalizeHeaderKey(key) {
+  const clean = String(key || "").trim().toLowerCase();
+  if (clean === "user-agent" || clean === "http-user-agent") return "User-Agent";
+  if (clean === "referer" || clean === "referrer" || clean === "http-referrer" || clean === "http-referer") return "Referer";
+  if (clean === "origin" || clean === "http-origin") return "Origin";
+  if (clean === "cookie") return "Cookie";
+  if (clean === "authorization") return "Authorization";
+  return key.trim();
+}
 
+/**
+ * Parses M3U/M3U8 playlist content into structured channel objects.
+ * Handles UTF-8 BOM, #EXTVLCOPT, #EXTHTTP, URL pipe headers, and caps MAX_CHANNELS_PER_SOURCE.
+ *
+ * @param {string} m3uContent - Raw M3U playlist string
+ * @param {string} defaultGroup - Default group name for fallback
+ * @returns {Array<Object>} List of parsed channels
+ */
 function parseM3U(m3uContent, defaultGroup) {
-  var channels = [];
-  if (!m3uContent || typeof m3uContent !== 'string') {
+  const channels = [];
+  if (!m3uContent || typeof m3uContent !== "string") {
     return channels;
   }
 
-  var lines = m3uContent.split(/\r?\n/);
-  var currentChannel = null;
+  // 1. Strip UTF-8 BOM if present
+  let cleanContent = m3uContent;
+  if (cleanContent.charCodeAt(0) === 0xFEFF || cleanContent.startsWith("\uFEFF")) {
+    cleanContent = cleanContent.slice(1);
+  }
 
-  for (var i = 0; i < lines.length; i++) {
-    var line = lines[i].trim();
+  const lines = cleanContent.split(/\r?\n/);
+  let currentChannel = null;
+  let pendingHeaders = {};
+
+  for (let i = 0; i < lines.length; i++) {
+    if (channels.length >= MAX_CHANNELS_PER_SOURCE) {
+      break;
+    }
+
+    const line = lines[i].trim();
     if (!line) continue;
 
-    if (line.startsWith('#EXTINF:')) {
+    // #EXTINF line
+    if (line.startsWith("#EXTINF:") || line.startsWith("#extinf:")) {
       currentChannel = {
-        id: '',
-        name: '',
-        logo: '',
-        group: defaultGroup || 'General',
-        streamUrl: '',
+        id: "",
+        name: "",
+        logo: "",
+        group: defaultGroup || "General",
+        streamUrl: "",
+        url: "",
+        title: "",
+        poster: "",
         streams: []
       };
+      pendingHeaders = {};
 
       // Extract tvg-id
-      var idMatch = line.match(/tvg-id="([^"]*)"/i);
+      const idMatch = line.match(/tvg-id="([^"]*)"/i);
       if (idMatch && idMatch[1]) {
-        currentChannel.id = idMatch[1];
+        currentChannel.id = idMatch[1].trim();
       }
 
       // Extract tvg-name
-      var nameMatch = line.match(/tvg-name="([^"]*)"/i);
+      const nameMatch = line.match(/tvg-name="([^"]*)"/i);
       if (nameMatch && nameMatch[1]) {
-        currentChannel.name = nameMatch[1];
+        currentChannel.name = nameMatch[1].trim();
       }
 
       // Extract tvg-logo
-      var logoMatch = line.match(/tvg-logo="([^"]*)"/i);
+      const logoMatch = line.match(/tvg-logo="([^"]*)"/i);
       if (logoMatch && logoMatch[1]) {
-        currentChannel.logo = logoMatch[1];
+        currentChannel.logo = logoMatch[1].trim();
       }
 
       // Extract group-title
-      var groupMatch = line.match(/group-title="([^"]*)"/i);
+      const groupMatch = line.match(/group-title="([^"]*)"/i);
       if (groupMatch && groupMatch[1]) {
-        currentChannel.group = groupMatch[1];
+        currentChannel.group = groupMatch[1].trim();
       }
 
       // Extract channel display title after comma
-      var commaIdx = line.lastIndexOf(',');
+      const commaIdx = line.lastIndexOf(",");
       if (commaIdx !== -1) {
-        var title = line.substring(commaIdx + 1).trim();
+        const title = line.substring(commaIdx + 1).trim();
         if (title && !currentChannel.name) {
           currentChannel.name = title;
         }
       }
 
       if (!currentChannel.id && currentChannel.name) {
-        currentChannel.id = currentChannel.name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+        currentChannel.id = currentChannel.name.toLowerCase().replace(/[^a-z0-9]/g, "_");
       }
-    } else if (!line.startsWith('#') && currentChannel) {
-      // Stream URL line
-      currentChannel.streamUrl = line;
-      currentChannel.url = line;
+    }
+    // #EXTVLCOPT header directive
+    else if (line.startsWith("#EXTVLCOPT:") || line.startsWith("#extvlcopt:")) {
+      const optMatch = line.match(/^#EXTVLCOPT:(?:http-)?([^=]+)=(.*)$/i);
+      if (optMatch && optMatch[1] && optMatch[2]) {
+        const headerKey = normalizeHeaderKey(optMatch[1]);
+        pendingHeaders[headerKey] = optMatch[2].trim();
+      }
+    }
+    // #EXTHTTP json header directive
+    else if (line.startsWith("#EXTHTTP:") || line.startsWith("#exthttp:")) {
+      const jsonStr = line.substring(line.indexOf(":") + 1).trim();
+      try {
+        const parsedHeaders = JSON.parse(jsonStr);
+        if (parsedHeaders && typeof parsedHeaders === "object") {
+          for (const key of Object.keys(parsedHeaders)) {
+            pendingHeaders[normalizeHeaderKey(key)] = String(parsedHeaders[key]).trim();
+          }
+        }
+      } catch (e) {
+        // ignore malformed JSON header
+      }
+    }
+    // Non-comment line = Stream URL
+    else if (!line.startsWith("#") && currentChannel) {
+      let rawUrl = line;
+
+      // Extract pipe headers if present (e.g. http://server.com/live.m3u8|User-Agent=Foo&Referer=Bar)
+      const pipeIdx = rawUrl.indexOf("|");
+      if (pipeIdx !== -1) {
+        const headerQuery = rawUrl.substring(pipeIdx + 1);
+        rawUrl = rawUrl.substring(0, pipeIdx).trim();
+
+        const params = headerQuery.split("&");
+        for (let p = 0; p < params.length; p++) {
+          const kv = params[p].split("=");
+          if (kv.length === 2) {
+            try {
+              const hKey = normalizeHeaderKey(decodeURIComponent(kv[0]));
+              const hVal = decodeURIComponent(kv[1]).trim();
+              pendingHeaders[hKey] = hVal;
+            } catch (err) {
+              const hKey = normalizeHeaderKey(kv[0]);
+              pendingHeaders[hKey] = kv[1].trim();
+            }
+          }
+        }
+      }
+
+      currentChannel.streamUrl = rawUrl;
+      currentChannel.url = rawUrl;
       currentChannel.title = currentChannel.name;
       currentChannel.poster = currentChannel.logo;
-      currentChannel.streams = [
-        {
-          name: currentChannel.name + " Live Feed",
-          url: line,
-          format: "hls",
-          quality: "1080p"
-        }
-      ];
+
+      const isHls = rawUrl.includes(".m3u8") || rawUrl.includes("/hls") || rawUrl.includes("m3u8");
+      const streamObj = {
+        name: `${currentChannel.name} Live Feed`,
+        url: rawUrl,
+        format: isHls ? "hls" : "hls",
+        quality: "1080p"
+      };
+
+      if (Object.keys(pendingHeaders).length > 0) {
+        streamObj.headers = { ...pendingHeaders };
+      }
+
+      currentChannel.streams = [streamObj];
 
       if (currentChannel.name && currentChannel.streamUrl) {
         channels.push(currentChannel);
       }
       currentChannel = null;
+      pendingHeaders = {};
     }
   }
 
   return channels;
 }
 
-var byosPlugin = {
-  id: "byos.plugin.iptv",
-  name: "IPTV Live Streamer",
-  version: "1.0.0",
-  author: "BYOS Ecosystem",
-  description: "Trình phát Live TV đa nguồn hỗ trợ danh mục IPTV.org & Custom M3U/M3U8",
-  supportedMedia: ["live_tv"],
+/**
+ * Storage helpers with fallback to in-memory cache
+ */
+let _inMemoryCache = null;
 
-  formSchema: {
-    title: "Cấu Hình Danh Sách Kênh Live TV",
-    description: "Quản lý nguồn phát truyền hình trực tuyến và làm mới danh sách kênh",
-    fields: [
-      {
-        key: "auto_reload_hours",
-        label: "Tự động làm mới danh mục (giờ)",
-        type: "select",
-        default: 24,
-        options: [
-          { label: "Mỗi 6 tiếng", value: 6 },
-          { label: "Mỗi 24 tiếng", value: 24 },
-          { label: "Không tự động làm mới", value: 0 }
-        ]
-      },
-      {
-        key: "sources",
-        label: "Danh Sách Nguồn Kênh",
-        type: "list",
-        itemTitle: "{name}",
-        default: DEFAULT_SOURCES,
-        itemSchema: [
-          {
-            key: "source_type",
-            label: "Loại Nguồn",
-            type: "select",
-            default: "builtin",
-            options: [
-              { label: "Nguồn có sẵn (Built-in Presets)", value: "builtin" },
-              { label: "Tùy biến (Custom M3U URL)", value: "custom" }
-            ]
-          },
-          {
-            key: "preset_id",
-            label: "Chọn Danh Mục Có Sẵn",
-            type: "select",
-            condition: { field: "source_type", equals: "builtin" },
-            default: "iptv_org_vn",
-            options: [
-              { label: "IPTV.org - Kênh Quốc Gia Việt Nam", value: "iptv_org_vn" },
-              { label: "IPTV.org - Kênh Thể Thao Quốc Tế", value: "iptv_org_sports" },
-              { label: "IPTV.org - Kênh Tin Tức 24/7", value: "iptv_org_news" }
-            ]
-          },
-          {
-            key: "name",
-            label: "Tên Nguồn",
-            type: "text",
-            placeholder: "VD: K+ Nhà Mạng",
-            condition: { field: "source_type", equals: "custom" },
-            required: true
-          },
-          {
-            key: "url",
-            label: "Đường Dẫn M3U / M3U8",
-            type: "url",
-            placeholder: "https://example.com/playlist.m3u",
-            condition: { field: "source_type", equals: "custom" },
-            required: true
-          },
-          {
-            key: "enabled",
-            label: "Kích hoạt nguồn này",
-            type: "boolean",
-            default: true
-          }
-        ]
+async function getStorageCache(ttlMs) {
+  try {
+    if (typeof byos !== "undefined" && byos.storage && typeof byos.storage.get === "function") {
+      const cached = await byos.storage.get(CACHE_STORAGE_KEY);
+      if (cached && Array.isArray(cached.channels) && cached.channels.length > 0) {
+        if (!ttlMs || (Date.now() - (cached.timestamp || 0) < ttlMs)) {
+          return cached.channels;
+        }
       }
-    ]
+    }
+  } catch (err) {
+    // storage read failed
+  }
+
+  if (_inMemoryCache && Array.isArray(_inMemoryCache.channels) && _inMemoryCache.channels.length > 0) {
+    if (!ttlMs || (Date.now() - (_inMemoryCache.timestamp || 0) < ttlMs)) {
+      return _inMemoryCache.channels;
+    }
+  }
+
+  return null;
+}
+
+async function setStorageCache(channels) {
+  const cacheData = {
+    timestamp: Date.now(),
+    channels: channels
+  };
+  _inMemoryCache = cacheData;
+
+  try {
+    if (typeof byos !== "undefined" && byos.storage && typeof byos.storage.set === "function") {
+      await byos.storage.set(CACHE_STORAGE_KEY, cacheData);
+    }
+  } catch (err) {
+    // storage write failed
+  }
+}
+
+/**
+ * Fetches and parses a single source safely
+ */
+async function fetchSource(source) {
+  if (!source || source.enabled === false) return [];
+
+  let targetUrl = "";
+  if (source.source_type === "builtin") {
+    targetUrl = PRESET_URLS[source.preset_id] || PRESET_URLS.iptv_org_vn;
+  } else {
+    targetUrl = source.url || "";
+  }
+
+  if (!targetUrl) return [];
+
+  try {
+    const response = await fetch(targetUrl);
+    if (!response.ok && response.status !== 200) {
+      return [];
+    }
+    const m3uText = await response.text();
+    return parseM3U(m3uText, source.name || "IPTV");
+  } catch (err) {
+    return [];
+  }
+}
+
+const byosPlugin = {
+  id: "byos.plugin.iptv",
+
+  /**
+   * Dynamic Hook: Returns the list of countries loaded 0ms from the local asset `countries.json`.
+   * Formats into [{ label: "🇻🇳 Việt Nam", value: "vn" }, ...]
+   */
+  async getCountries() {
+    try {
+      let raw = null;
+      if (typeof byos !== "undefined" && typeof byos.readAsset === "function") {
+        raw = await byos.readAsset("countries.json");
+      }
+      if (raw) {
+        const list = typeof raw === "string" ? JSON.parse(raw) : raw;
+        if (Array.isArray(list)) {
+          return list.map(c => ({
+            label: `${c.flag || ""} ${c.name || c.code || ""}`.trim(),
+            value: c.code || c.id || "vn"
+          }));
+        }
+      }
+    } catch (err) {
+      // Fallback
+    }
+
+    return [
+      { label: "🇻🇳 Việt Nam", value: "vn" },
+      { label: "🇺🇸 United States", value: "us" },
+      { label: "🇬🇧 United Kingdom", value: "uk" }
+    ];
   },
 
+  /**
+   * Dynamic Hook: Fetches and parses playlist for the selected country, caches in storage,
+   * and returns option list [{ label, value: { id, name, logo, url, streams } }].
+   */
+  async getChannelsByCountry(formValues) {
+    let country = "vn";
+    if (typeof formValues === "string" && formValues.trim().length > 0) {
+      country = formValues.trim().toLowerCase();
+    } else if (formValues && typeof formValues === "object") {
+      if (typeof formValues.country === "string" && formValues.country.trim().length > 0) {
+        country = formValues.country.trim().toLowerCase();
+      } else if (formValues.country && typeof formValues.country === "object" && formValues.country.code) {
+        country = String(formValues.country.code).trim().toLowerCase();
+      } else if (typeof formValues.value === "string" && formValues.value.trim().length > 0) {
+        country = formValues.value.trim().toLowerCase();
+      }
+    }
+
+    const storageKey = `channels_${country}`;
+    let channels = null;
+
+    // 1. Try to read from byos.storage collection / key
+    try {
+      if (typeof byos !== "undefined" && byos.storage) {
+        if (typeof byos.storage.getCollection === "function") {
+          const col = await byos.storage.getCollection(storageKey);
+          if (Array.isArray(col) && col.length > 0) {
+            channels = col;
+          }
+        }
+        if (!channels && typeof byos.storage.get === "function") {
+          const val = await byos.storage.get(storageKey);
+          if (Array.isArray(val) && val.length > 0) {
+            channels = val;
+          }
+        }
+      }
+    } catch (_) {}
+
+    // 2. If not in storage, fetch from iptv-org repository
+    if (!channels || channels.length === 0) {
+      const url = `https://raw.githubusercontent.com/iptv-org/iptv/master/streams/${country}.m3u`;
+      try {
+        const res = await fetch(url);
+        if (res.ok || res.status === 200) {
+          const text = await res.text();
+          channels = parseM3U(text, country.toUpperCase());
+          if (channels.length > 0 && typeof byos !== "undefined" && byos.storage) {
+            if (typeof byos.storage.setCollection === "function") {
+              await byos.storage.setCollection(storageKey, channels);
+            }
+            if (typeof byos.storage.set === "function") {
+              await byos.storage.set(storageKey, channels);
+            }
+          }
+        }
+      } catch (e) {
+        channels = [];
+      }
+    }
+
+    if (!Array.isArray(channels)) {
+      channels = [];
+    }
+
+    // 3. Map to dynamic select option contract: { label, value: { id, name, logo, url, streams, group } }
+    return channels.map(ch => {
+      const channelObj = {
+        id: ch.id || (ch.name ? ch.name.toLowerCase().replace(/[^a-z0-9]/g, "_") : "ch"),
+        name: ch.name || ch.title || "Live Channel",
+        title: ch.title || ch.name || "Live Channel",
+        logo: ch.logo || ch.poster || "",
+        poster: ch.poster || ch.logo || "",
+        group: ch.group || country.toUpperCase(),
+        url: ch.streamUrl || ch.url || "",
+        streamUrl: ch.streamUrl || ch.url || "",
+        streams: Array.isArray(ch.streams) && ch.streams.length > 0 ? ch.streams : [
+          {
+            name: `${ch.name || ch.title || "Live Channel"} Live Feed`,
+            url: ch.streamUrl || ch.url || "",
+            format: "hls",
+            quality: "1080p",
+            headers: ch.headers || {}
+          }
+        ]
+      };
+
+      return {
+        label: channelObj.name,
+        value: channelObj
+      };
+    });
+  },
+
+  /**
+   * Fetches, aggregates and deduplicates channels across configured sources or user selected channels.
+   * If `settings.selected_channels` is present, returns them directly for 0ms instant catalog.
+   *
+   * @param {Object} [settings] Plugin settings from form schema
+   * @returns {Promise<Array<Object>>} List of normalized Live TV channels
+   */
   async getChannels(settings) {
-    var sources = (settings && Array.isArray(settings.sources) && settings.sources.length > 0)
-      ? settings.sources
-      : DEFAULT_SOURCES;
+    // 1. Instant 0ms playback: If user has explicitly selected channels in settings
+    if (settings && Array.isArray(settings.selected_channels) && settings.selected_channels.length > 0) {
+      const selected = [];
+      for (let i = 0; i < settings.selected_channels.length; i++) {
+        const item = settings.selected_channels[i];
+        if (!item) continue;
 
-    var allChannels = [];
-    var seenIds = {};
-
-    for (var i = 0; i < sources.length; i++) {
-      var source = sources[i];
-      if (source.enabled === false) continue;
-
-      var targetUrl = "";
-      if (source.source_type === "builtin") {
-        targetUrl = PRESET_URLS[source.preset_id] || PRESET_URLS.iptv_org_vn;
-      } else {
-        targetUrl = source.url || "";
+        if (typeof item === "object") {
+          const streamUrl = item.streamUrl || item.url || (Array.isArray(item.streams) && item.streams[0] && item.streams[0].url) || "";
+          selected.push({
+            id: item.id || (item.name ? item.name.toLowerCase().replace(/[^a-z0-9]/g, "_") : `ch_${i}`),
+            name: item.name || item.title || "Live Channel",
+            title: item.title || item.name || "Live Channel",
+            logo: item.logo || item.poster || "",
+            poster: item.poster || item.logo || "",
+            group: item.group || "Favorites",
+            url: streamUrl,
+            streamUrl: streamUrl,
+            streams: Array.isArray(item.streams) && item.streams.length > 0 ? item.streams : [
+              {
+                name: `${item.name || item.title || "Live Channel"} Live Feed`,
+                url: streamUrl,
+                format: "hls",
+                quality: "1080p",
+                headers: item.headers || {}
+              }
+            ]
+          });
+        }
       }
 
-      if (!targetUrl) continue;
+      // Merge any custom user M3U sources if specified
+      if (Array.isArray(settings.sources) && settings.sources.length > 0) {
+        const customTasks = settings.sources
+          .filter(s => s && s.enabled !== false)
+          .map(s => fetchSource(s));
+        const results = await Promise.allSettled(customTasks);
+        for (const res of results) {
+          if (res.status === "fulfilled" && Array.isArray(res.value)) {
+            selected.push(...res.value);
+          }
+        }
+      }
 
-      try {
-        var response = await fetch(targetUrl);
-        var m3uText = await response.text();
-        var parsed = parseM3U(m3uText, source.name || "IPTV");
+      if (selected.length > 0) {
+        return selected;
+      }
+    }
 
-        for (var j = 0; j < parsed.length; j++) {
-          var ch = parsed[j];
-          var dedupeKey = ch.name + "::" + ch.streamUrl;
-          if (!seenIds[dedupeKey]) {
-            seenIds[dedupeKey] = true;
+    const autoReloadHours = (settings && typeof settings.auto_reload_hours === "number")
+      ? settings.auto_reload_hours
+      : DEFAULT_AUTO_RELOAD_HOURS;
+
+    const forceRefresh = Boolean(settings && (settings.forceRefresh || settings.force_refresh));
+    const ttlMs = autoReloadHours > 0 ? (autoReloadHours * 3600 * 1000) : 0;
+
+    // 2. Return cached channels if valid
+    if (!forceRefresh) {
+      const cachedChannels = await getStorageCache(ttlMs);
+      if (cachedChannels && cachedChannels.length > 0) {
+        return cachedChannels;
+      }
+    }
+
+    // 3. Fallback: Fetch country playlist (default 'vn') + any configured sources
+    const country = (settings && typeof settings.country === "string" && settings.country.trim())
+      ? settings.country.trim().toLowerCase()
+      : "vn";
+
+    const defaultSource = {
+      name: `IPTV.org (${country.toUpperCase()})`,
+      source_type: "custom",
+      url: `https://raw.githubusercontent.com/iptv-org/iptv/master/streams/${country}.m3u`,
+      enabled: true
+    };
+
+    const sources = (settings && Array.isArray(settings.sources) && settings.sources.length > 0)
+      ? [defaultSource, ...settings.sources]
+      : [defaultSource];
+
+    const fetchTasks = sources
+      .filter(s => s && s.enabled !== false)
+      .map(s => fetchSource(s));
+
+    const results = await Promise.allSettled(fetchTasks);
+
+    const allChannels = [];
+    const seenKeys = {};
+
+    for (let r = 0; r < results.length; r++) {
+      const res = results[r];
+      if (res.status === "fulfilled" && Array.isArray(res.value)) {
+        for (let c = 0; c < res.value.length; c++) {
+          const ch = res.value[c];
+          const dedupeKey = `${ch.name}::${ch.streamUrl}`;
+          if (!seenKeys[dedupeKey]) {
+            seenKeys[dedupeKey] = true;
             allChannels.push(ch);
           }
         }
-      } catch (err) {
-        // Continue to next source if one fails
       }
     }
+
+    // 4. Persist into byos.storage cache
+    await setStorageCache(allChannels);
 
     return allChannels;
   },
 
+  /**
+   * Resolves playable streams for a specific channel.
+   * Checks settings.selected_channels and cache first to avoid redundant network roundtrips.
+   *
+   * @param {Object|string} args Query args or channel ID (supports args.id, args.tmdbId, args.name)
+   * @returns {Promise<Array<Object>>} List of stream objects
+   */
   async getStreams(args) {
-    var channelId = (args && (args.tmdbId || args.id)) || '';
-    var channels = await this.getChannels(args && args.settings);
-    var matched = channels.find(function(c) { return c.id === channelId || c.name === channelId; });
+    let channelId = "";
+    let settings = null;
+    let directUrl = "";
+    let directStreams = null;
 
-    if (matched && matched.streams) {
+    if (args && typeof args === "object") {
+      channelId = String(args.id || args.tmdbId || args.name || args.title || "");
+      settings = args.settings || null;
+      directUrl = args.streamUrl || args.url || "";
+      directStreams = args.streams || null;
+    } else if (typeof args === "string") {
+      channelId = args;
+    }
+
+    // 1. Direct stream payload in args
+    if (Array.isArray(directStreams) && directStreams.length > 0) {
+      return directStreams;
+    }
+    if (directUrl) {
+      return [
+        {
+          name: `${(args && (args.name || args.title)) || "Live Channel"} Live Feed`,
+          url: directUrl,
+          format: "hls",
+          quality: "1080p"
+        }
+      ];
+    }
+
+    const normalizedQuery = channelId.trim().toLowerCase();
+
+    // 2. Check settings.selected_channels
+    if (settings && Array.isArray(settings.selected_channels)) {
+      const matched = settings.selected_channels.find(c => {
+        if (!c) return false;
+        const cId = String(c.id || "").toLowerCase();
+        const cName = String(c.name || "").toLowerCase();
+        const cTitle = String(c.title || "").toLowerCase();
+        return cId === normalizedQuery || cName === normalizedQuery || cTitle === normalizedQuery;
+      });
+
+      if (matched) {
+        if (Array.isArray(matched.streams) && matched.streams.length > 0) {
+          return matched.streams;
+        }
+        const sUrl = matched.streamUrl || matched.url;
+        if (sUrl) {
+          return [
+            {
+              name: `${matched.name || matched.title || "Live Channel"} Live Feed`,
+              url: sUrl,
+              format: "hls",
+              quality: "1080p"
+            }
+          ];
+        }
+      }
+    }
+
+    // 3. Try to find in cache first without re-fetching
+    const cachedChannels = await getStorageCache(0);
+    let channels = cachedChannels;
+
+    // 4. If no cache, perform fresh fetch
+    if (!channels || channels.length === 0) {
+      channels = await this.getChannels(settings);
+    }
+
+    let matched = (channels || []).find(c => {
+      if (!c) return false;
+      const cId = String(c.id || "").toLowerCase();
+      const cName = String(c.name || "").toLowerCase();
+      const cTitle = String(c.title || "").toLowerCase();
+      return cId === normalizedQuery || cName === normalizedQuery || cTitle === normalizedQuery;
+    });
+
+    // 5. If not found in cache, re-fetch once
+    if (!matched && cachedChannels) {
+      channels = await this.getChannels({ ...settings, forceRefresh: true });
+      matched = (channels || []).find(c => {
+        if (!c) return false;
+        const cId = String(c.id || "").toLowerCase();
+        const cName = String(c.name || "").toLowerCase();
+        const cTitle = String(c.title || "").toLowerCase();
+        return cId === normalizedQuery || cName === normalizedQuery || cTitle === normalizedQuery;
+      });
+    }
+
+    if (matched && Array.isArray(matched.streams) && matched.streams.length > 0) {
       return matched.streams;
     }
+
+    if (matched && matched.streamUrl) {
+      return [
+        {
+          name: `${matched.name} Live Feed`,
+          url: matched.streamUrl,
+          format: "hls",
+          quality: "1080p"
+        }
+      ];
+    }
+
     return [];
+  },
+
+  /**
+   * BYOS 4-Primitives stream resolver alias
+   */
+  async stream(mediaId, episodeId, settings) {
+    if (typeof mediaId === "object" && mediaId !== null) {
+      return await this.getStreams(mediaId);
+    }
+    return await this.getStreams({ id: mediaId, settings });
   }
 };
 
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = byosPlugin;
 }
