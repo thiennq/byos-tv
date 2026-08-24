@@ -1,0 +1,98 @@
+{
+  "id": "byos-iptv-repo",
+  "name": "BYOS Official IPTV Hub",
+  "version": "1.0.0",
+  "description": "Kho kênh truyền hình trực tuyến Live TV đa nguồn và tự động giải mã",
+  "author": "BYOS Ecosystem",
+  "manifestUrl": "https://thiennq.github.io/byos-tv/plugins/byos-iptv/manifest.json",
+  "plugins": [
+    {
+      "id": "byos.plugin.iptv",
+      "name": "IPTV Live Streamer",
+      "version": "1.0.0",
+      "author": "BYOS Ecosystem",
+      "description": "Trình phát Live TV đa nguồn hỗ trợ danh mục IPTV.org & Custom M3U/M3U8",
+      "scriptUrl": "https://thiennq.github.io/byos-tv/plugins/byos-iptv/iptv_plugin.js",
+      "supportedMedia": ["live_tv"],
+      "enabled": true,
+      "protocol": "byos",
+      "formSchema": {
+        "title": "Cấu Hình Danh Sách Kênh Live TV",
+        "description": "Quản lý nguồn phát truyền hình trực tuyến và làm mới danh sách kênh",
+        "fields": [
+          {
+            "key": "auto_reload_hours",
+            "label": "Tự động làm mới danh mục (giờ)",
+            "type": "select",
+            "default": 24,
+            "options": [
+              { "label": "Mỗi 6 tiếng", "value": 6 },
+              { "label": "Mỗi 24 tiếng", "value": 24 },
+              { "label": "Không tự động làm mới", "value": 0 }
+            ]
+          },
+          {
+            "key": "sources",
+            "label": "Danh Sách Nguồn Kênh",
+            "type": "list",
+            "itemTitle": "{name}",
+            "default": [
+              {
+                "name": "IPTV.org Vietnam",
+                "source_type": "builtin",
+                "preset_id": "iptv_org_vn",
+                "enabled": true
+              }
+            ],
+            "itemSchema": [
+              {
+                "key": "source_type",
+                "label": "Loại Nguồn",
+                "type": "select",
+                "default": "builtin",
+                "options": [
+                  { "label": "Nguồn có sẵn (Built-in Presets)", "value": "builtin" },
+                  { "label": "Tùy biến (Custom M3U URL)", "value": "custom" }
+                ]
+              },
+              {
+                "key": "preset_id",
+                "label": "Chọn Danh Mục Có Sẵn",
+                "type": "select",
+                "condition": { "field": "source_type", "equals": "builtin" },
+                "default": "iptv_org_vn",
+                "options": [
+                  { "label": "IPTV.org - Kênh Quốc Gia Việt Nam", "value": "iptv_org_vn" },
+                  { "label": "IPTV.org - Kênh Thể Thao Quốc Tế", "value": "iptv_org_sports" },
+                  { "label": "IPTV.org - Kênh Tin Tức 24/7", "value": "iptv_org_news" }
+                ]
+              },
+              {
+                "key": "name",
+                "label": "Tên Nguồn",
+                "type": "text",
+                "placeholder": "VD: K+ Nhà Mạng",
+                "condition": { "field": "source_type", "equals": "custom" },
+                "required": true
+              },
+              {
+                "key": "url",
+                "label": "Đường Dẫn M3U / M3U8",
+                "type": "url",
+                "placeholder": "https://example.com/playlist.m3u",
+                "condition": { "field": "source_type", "equals": "custom" },
+                "required": true
+              },
+              {
+                "key": "enabled",
+                "label": "Kích hoạt nguồn này",
+                "type": "boolean",
+                "default": true
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

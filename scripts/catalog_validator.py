@@ -444,7 +444,25 @@ def process_and_export_catalogs(
             categories_for_index = []
             manifest_hashes = {}
 
-            for fpath, data in loaded_data.items():
+            CATEGORY_ORDER = {
+                "open_movies_4k": 1,
+                "open-movies": 1,
+                "vietnam_iptv": 2,
+                "vietnam-iptv": 2,
+                "live_tv_free": 3,
+                "iptv-channels": 3,
+                "classic_cinema": 4,
+                "classic-movies": 4,
+                "theater_trailers": 5,
+                "trailers": 5,
+            }
+
+            sorted_items = sorted(
+                loaded_data.items(),
+                key=lambda item: CATEGORY_ORDER.get(item[1].get("id", item[0].stem), CATEGORY_ORDER.get(item[0].stem, 99))
+            )
+
+            for fpath, data in sorted_items:
                 export_data = data
                 if filter_dead and stream_results:
                     export_data = _filter_dead_streams_from_data(data, stream_results)

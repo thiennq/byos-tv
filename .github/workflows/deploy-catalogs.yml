@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'catalogs/**'
+      - 'plugins/**'
       - 'scripts/catalog_validator.py'
       - '.github/workflows/deploy-catalogs.yml'
   schedule:
@@ -51,6 +52,15 @@ jobs:
             --minify \
             --timeout 8.0 \
             --workers 12
+
+      - name: Copy Distribution Plugins
+        run: |
+          if [ -d "plugins" ]; then
+            mkdir -p dist/plugins
+            cp -r plugins/* dist/plugins/
+            echo "=== Plugins Copied ==="
+            ls -la dist/plugins/
+          fi
 
       - name: Verify Build Artifacts
         run: |
