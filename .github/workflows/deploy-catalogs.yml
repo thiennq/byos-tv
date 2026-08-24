@@ -7,8 +7,9 @@ on:
     paths:
       - 'catalogs/**'
       - 'plugins/**'
-      - 'scripts/catalog_validator.py'
-      - '.github/workflows/deploy-catalogs.yml'
+      - '*.json'
+      - 'scripts/**'
+      - '.github/workflows/**'
   schedule:
     # Daily stream health check & auto-cleaning at 00:00 UTC
     - cron: '0 0 * * *'
@@ -53,13 +54,17 @@ jobs:
             --timeout 8.0 \
             --workers 12
 
-      - name: Copy Distribution Plugins
+      - name: Copy Distribution Plugins & Repository Manifests
         run: |
           if [ -d "plugins" ]; then
             mkdir -p dist/plugins
             cp -r plugins/* dist/plugins/
             echo "=== Plugins Copied ==="
             ls -la dist/plugins/
+          fi
+          if [ -f "plugin-repository.json" ]; then
+            cp plugin-repository.json dist/
+            echo "=== plugin-repository.json Copied ==="
           fi
 
       - name: Verify Build Artifacts
