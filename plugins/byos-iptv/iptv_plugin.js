@@ -269,14 +269,28 @@ const byosPlugin = {
    * Formats into [{ label: "🇻🇳 Việt Nam", value: "vn" }, ...]
    */
   async getCountries() {
+    if (typeof logger !== "undefined") {
+      logger.log("[byos-iptv] Calling getCountries dynamic hook...");
+    }
     try {
       let raw = null;
       if (typeof byos !== "undefined" && typeof byos.readAsset === "function") {
+        if (typeof logger !== "undefined") {
+          logger.log("[byos-iptv] Reading asset countries.json via byos.readAsset()...");
+        }
         raw = await byos.readAsset("countries.json");
+        if (typeof logger !== "undefined") {
+          logger.log("[byos-iptv] Asset raw data:", raw ? (typeof raw === "string" ? `length=${raw.length}` : typeof raw) : "null");
+        }
+      } else if (typeof logger !== "undefined") {
+        logger.warn("[byos-iptv] byos.readAsset is not available in environment");
       }
       if (raw) {
         const list = typeof raw === "string" ? JSON.parse(raw) : raw;
         if (Array.isArray(list)) {
+          if (typeof logger !== "undefined") {
+            logger.log(`[byos-iptv] Successfully parsed ${list.length} countries from asset`);
+          }
           return list.map(c => ({
             label: `${c.flag || ""} ${c.name || c.code || ""}`.trim(),
             value: c.code || c.id || "vn"
@@ -284,9 +298,14 @@ const byosPlugin = {
         }
       }
     } catch (err) {
-      // Fallback
+      if (typeof logger !== "undefined") {
+        logger.error("[byos-iptv] Error in getCountries:", err && err.message ? err.message : String(err));
+      }
     }
 
+    if (typeof logger !== "undefined") {
+      logger.warn("[byos-iptv] Falling back to default top 3 countries");
+    }
     return [
       { label: "🇻🇳 Việt Nam", value: "vn" },
       { label: "🇺🇸 United States", value: "us" },
@@ -299,6 +318,9 @@ const byosPlugin = {
    * and returns option list [{ label, value: { id, name, logo, url, streams } }].
    */
   async getChannelsByCountry(formValues) {
+    if (typeof logger !== "undefined") {
+      logger.log("[byos-iptv] Calling getChannelsByCountry with formValues:", formValues);
+    }
     let country = "vn";
     if (typeof formValues === "string" && formValues.trim().length > 0) {
       country = formValues.trim().toLowerCase();
@@ -336,11 +358,17 @@ const byosPlugin = {
     // 2. If not in storage, fetch from iptv-org repository
     if (!channels || channels.length === 0) {
       const url = `https://raw.githubusercontent.com/iptv-org/iptv/master/streams/${country}.m3u`;
+      if (typeof logger !== "undefined") {
+        logger.log(`[byos-iptv] Fetching remote M3U playlist from ${url}...`);
+      }
       try {
         const res = await fetch(url);
         if (res.ok || res.status === 200) {
           const text = await res.text();
           channels = parseM3U(text, country.toUpperCase());
+          if (typeof logger !== "undefined") {
+            logger.log(`[byos-iptv] Parsed ${channels.length} channels for country: ${country}`);
+          }
           if (channels.length > 0 && typeof byos !== "undefined" && byos.storage) {
             if (typeof byos.storage.setCollection === "function") {
               await byos.storage.setCollection(storageKey, channels);
@@ -350,7 +378,10 @@ const byosPlugin = {
             }
           }
         }
-      } catch (e) {
+      } catch (err) {
+        if (typeof logger !== "undefined") {
+          logger.error(`[byos-iptv] Failed to fetch channels for country ${country}:`, err && err.message ? err.message : String(err));
+        }
         channels = [];
       }
     }
