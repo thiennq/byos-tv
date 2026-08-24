@@ -1,0 +1,23 @@
+{
+  "$schema": "https://byos.tv/schemas/repository.v1.json",
+  "id": "byos-official-plugin-repo",
+  "name": "BYOS Official Plugin Repository",
+  "version": "1.1.0",
+  "description": "Kho JS Plugins chính thức tối ưu cho BYOS TV với $0 Server & QuickJS Sandbox",
+  "author": "BYOS Ecosystem",
+  "homepage": "https://github.com/thiennq/byos-tv",
+  "manifestUrl": "https://thiennq.github.io/byos-tv/plugin-repository.json",
+  "updatedAt": "2026-08-25T00:00:00Z",
+  "plugins": [
+    {
+      "id": "byos.plugin.iptv",
+      "name": "IPTV Live Streamer",
+      "version": "1.1.0",
+      "author": "BYOS Ecosystem",
+      "description": "Trình phát Live TV đa nguồn hỗ trợ 240+ quốc gia và lọc kênh tức thì 0ms",
+      "icon": "https://thiennq.github.io/byos-tv/plugins/byos-iptv/icon.png",
+      "supportedMedia": ["live_tv"],
+      "manifestUrl": "https://thiennq.github.io/byos-tv/plugins/byos-iptv/manifest.json"
+    }
+  ]
+}

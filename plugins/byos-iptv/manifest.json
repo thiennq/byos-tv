@@ -1,85 +1,78 @@
 {
-  "id": "byos-iptv-repo",
-  "name": "BYOS Official IPTV Hub",
+  "$schema": "https://byos.tv/schemas/plugin.v1.json",
+  "id": "byos.plugin.iptv",
+  "name": "IPTV Live Streamer",
   "version": "1.1.0",
-  "description": "Kho kênh truyền hình trực tuyến Live TV đa nguồn và tự động giải mã",
   "author": "BYOS Ecosystem",
-  "manifestUrl": "https://thiennq.github.io/byos-tv/plugins/byos-iptv/manifest.json",
-  "plugins": [
-    {
-      "id": "byos.plugin.iptv",
-      "name": "IPTV Live Streamer",
-      "version": "1.1.0",
-      "author": "BYOS Ecosystem",
-      "description": "Trình phát Live TV đa nguồn hỗ trợ 240+ quốc gia và lọc kênh tức thì 0ms",
-      "scriptUrl": "https://thiennq.github.io/byos-tv/plugins/byos-iptv/iptv_plugin.js",
-      "assets": ["countries.json"],
-      "supportedMedia": ["live_tv"],
-      "enabled": true,
-      "protocol": "byos",
-      "formSchema": {
-        "title": "Cấu Hình Danh Sách Kênh Live TV",
-        "description": "Chọn quốc gia và các kênh truyền hình muốn phát trực tiếp",
-        "fields": [
+  "description": "Trình phát Live TV đa nguồn hỗ trợ 240+ quốc gia và lọc kênh tức thì 0ms",
+  "homepage": "https://github.com/thiennq/byos-tv/tree/main/plugins/byos-iptv",
+  "entrypoint": "iptv_plugin.js",
+  "scriptUrl": "https://thiennq.github.io/byos-tv/plugins/byos-iptv/iptv_plugin.js",
+  "assets": ["countries.json"],
+  "supportedMedia": ["live_tv"],
+  "capabilities": ["channels", "streams"],
+  "protocol": "byos",
+  "formSchema": {
+    "title": "Cấu Hình Danh Sách Kênh Live TV",
+    "description": "Chọn quốc gia và các kênh truyền hình muốn phát trực tiếp",
+    "fields": [
+      {
+        "key": "country",
+        "label": "Chọn Quốc Gia",
+        "type": "select",
+        "searchable": true,
+        "default": "vn",
+        "dynamicHook": "getCountries"
+      },
+      {
+        "key": "selected_channels",
+        "label": "Danh Sách Kênh Muốn Phát",
+        "type": "multi_select",
+        "searchable": true,
+        "dependsOn": "country",
+        "dynamicHook": "getChannelsByCountry",
+        "placeholder": "Gõ tìm kiếm kênh (VD: VTV, HTV, Thể thao)..."
+      },
+      {
+        "key": "auto_reload_hours",
+        "label": "Tự động làm mới danh mục (giờ)",
+        "type": "select",
+        "default": 24,
+        "options": [
+          { "label": "Mỗi 6 tiếng", "value": 6 },
+          { "label": "Mỗi 24 tiếng", "value": 24 },
+          { "label": "Không tự động làm mới", "value": 0 }
+        ]
+      },
+      {
+        "key": "sources",
+        "label": "Nguồn Kênh Tùy Biến Thêm (Custom M3U)",
+        "type": "list",
+        "itemTitle": "{name}",
+        "default": [],
+        "itemSchema": [
           {
-            "key": "country",
-            "label": "Chọn Quốc Gia",
-            "type": "select",
-            "searchable": true,
-            "default": "vn",
-            "dynamicHook": "getCountries"
+            "key": "name",
+            "label": "Tên Nguồn",
+            "type": "text",
+            "placeholder": "VD: K+ Nhà Mạng",
+            "required": true
           },
           {
-            "key": "selected_channels",
-            "label": "Danh Sách Kênh Muốn Phát",
-            "type": "multi_select",
-            "searchable": true,
-            "dependsOn": "country",
-            "dynamicHook": "getChannelsByCountry",
-            "placeholder": "Gõ tìm kiếm kênh (VD: VTV, HTV, Thể thao)..."
+            "key": "url",
+            "label": "Đường Dẫn M3U / M3U8",
+            "type": "url",
+            "placeholder": "https://example.com/playlist.m3u",
+            "required": true
           },
           {
-            "key": "auto_reload_hours",
-            "label": "Tự động làm mới danh mục (giờ)",
-            "type": "select",
-            "default": 24,
-            "options": [
-              { "label": "Mỗi 6 tiếng", "value": 6 },
-              { "label": "Mỗi 24 tiếng", "value": 24 },
-              { "label": "Không tự động làm mới", "value": 0 }
-            ]
-          },
-          {
-            "key": "sources",
-            "label": "Nguồn Kênh Tùy Biến Thêm (Custom M3U)",
-            "type": "list",
-            "itemTitle": "{name}",
-            "default": [],
-            "itemSchema": [
-              {
-                "key": "name",
-                "label": "Tên Nguồn",
-                "type": "text",
-                "placeholder": "VD: K+ Nhà Mạng",
-                "required": true
-              },
-              {
-                "key": "url",
-                "label": "Đường Dẫn M3U / M3U8",
-                "type": "url",
-                "placeholder": "https://example.com/playlist.m3u",
-                "required": true
-              },
-              {
-                "key": "enabled",
-                "label": "Kích hoạt nguồn này",
-                "type": "boolean",
-                "default": true
-              }
-            ]
+            "key": "enabled",
+            "label": "Kích hoạt nguồn này",
+            "type": "boolean",
+            "default": true
           }
         ]
       }
-    }
-  ]
+    ]
+  }
 }
