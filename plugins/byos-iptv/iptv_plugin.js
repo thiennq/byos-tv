@@ -461,10 +461,10 @@ const byosPlugin = {
       }
 
       // Merge any custom user M3U sources if specified
-      if (Array.isArray(settings.sources) && settings.sources.length > 0) {
-        const customTasks = settings.sources
-          .filter(s => s && s.enabled !== false)
-          .map(s => fetchSource(s));
+      if (Array.isArray(s.sources) && s.sources.length > 0) {
+        const customTasks = s.sources
+          .filter(src => src && src.enabled !== false)
+          .map(src => fetchSource(src));
         const results = await Promise.allSettled(customTasks);
         for (const res of results) {
           if (res.status === "fulfilled" && Array.isArray(res.value)) {
@@ -478,11 +478,11 @@ const byosPlugin = {
       }
     }
 
-    const autoReloadHours = (settings && typeof settings.auto_reload_hours === "number")
-      ? settings.auto_reload_hours
+    const autoReloadHours = (s && typeof s.auto_reload_hours === "number")
+      ? s.auto_reload_hours
       : DEFAULT_AUTO_RELOAD_HOURS;
 
-    const forceRefresh = Boolean(settings && (settings.forceRefresh || settings.force_refresh));
+    const forceRefresh = Boolean(s && (s.forceRefresh || s.force_refresh));
     const ttlMs = autoReloadHours > 0 ? (autoReloadHours * 3600 * 1000) : 0;
 
     // 2. Return cached channels if valid
@@ -494,8 +494,8 @@ const byosPlugin = {
     }
 
     // 3. Fallback: Fetch country playlist (default 'vn') + any configured sources
-    const country = (settings && typeof settings.country === "string" && settings.country.trim())
-      ? settings.country.trim().toLowerCase()
+    const country = (s && typeof s.country === "string" && s.country.trim())
+      ? s.country.trim().toLowerCase()
       : "vn";
 
     const defaultSource = {
@@ -505,8 +505,8 @@ const byosPlugin = {
       enabled: true
     };
 
-    const sources = (settings && Array.isArray(settings.sources) && settings.sources.length > 0)
-      ? [defaultSource, ...settings.sources]
+    const sources = (s && Array.isArray(s.sources) && s.sources.length > 0)
+      ? [defaultSource, ...s.sources]
       : [defaultSource];
 
     const fetchTasks = sources
