@@ -1,0 +1,40 @@
+{
+  "id": "byos.plugin.cinema_sample",
+  "name": "Cinema Sample Pro",
+  "version": "1.0.0",
+  "description": "Reference implementation supporting all 4 Primitives: Catalog, Meta, Stream, and Subtitles with byos.settings SDK.",
+  "author": "TorNAS Community",
+  "entrypoint": "vod_plugin.js",
+  "supportedMedia": ["movie", "series"],
+  "resources": ["catalog", "meta", "stream", "subtitles"],
+  "types": ["movie", "series"],
+  "formSchema": {
+    "title": "Cinema Sample Settings",
+    "description": "Configure resolution preferences and custom provider endpoint",
+    "fields": [
+      {
+        "key": "api_key",
+        "label": "Provider API Key",
+        "type": "password",
+        "placeholder": "Enter secret API token..."
+      },
+      {
+        "key": "preferred_resolution",
+        "label": "Preferred Resolution",
+        "type": "select",
+        "defaultValue": "4k",
+        "options": [
+          { "label": "4K Ultra HD (2160p)", "value": "4k" },
+          { "label": "Full HD (1080p)", "value": "1080p" },
+          { "label": "HD (720p)", "value": "720p" }
+        ]
+      },
+      {
+        "key": "auto_subtitles",
+        "label": "Auto Load Vietnamese Subtitles",
+        "type": "boolean",
+        "defaultValue": true
+      }
+    ]
+  }
+}

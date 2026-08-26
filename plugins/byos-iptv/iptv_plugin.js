@@ -427,11 +427,13 @@ const byosPlugin = {
    * @returns {Promise<Array<Object>>} List of normalized Live TV channels
    */
   async getChannels(settings) {
+    const s = settings || (typeof byos !== "undefined" && byos.settings) || {};
+
     // 1. Instant 0ms playback: If user has explicitly selected channels in settings
-    if (settings && Array.isArray(settings.selected_channels) && settings.selected_channels.length > 0) {
+    if (s && Array.isArray(s.selected_channels) && s.selected_channels.length > 0) {
       const selected = [];
-      for (let i = 0; i < settings.selected_channels.length; i++) {
-        const item = settings.selected_channels[i];
+      for (let i = 0; i < s.selected_channels.length; i++) {
+        const item = s.selected_channels[i];
         if (!item) continue;
 
         if (typeof item === "object") {
