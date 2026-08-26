@@ -145,11 +145,6 @@ const byosPlugin = {
     }));
   },
 
-  // Alias for backward compatibility
-  async getCatalog(args) {
-    return await this.getCatalogItems(args);
-  },
-
   /**
    * RESOURCE 2: META
    * Returns rich media details, cast, director, and episode hierarchy.
