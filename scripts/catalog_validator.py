@@ -567,14 +567,14 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Validate schema and probe streams for all sources:
-  python3 scripts/catalog_validator.py --input catalogs/sources/ --check-streams
+  # Validate schema and build distribution into dist/ without stream probing:
+  python3 scripts/catalog_validator.py
 
-  # Validate default asset catalog:
-  python3 scripts/catalog_validator.py --input client/assets/catalogs/default_catalogs.json --check-streams
+  # Validate and build distribution into dist/ with full stream health checks:
+  python3 scripts/catalog_validator.py --check-streams --filter-dead
 
-  # Build dist catalog and remove dead streams:
-  python3 scripts/catalog_validator.py --input catalogs/sources/ --output catalogs/dist/ --check-streams --filter-dead
+  # Validate single catalog file:
+  python3 scripts/catalog_validator.py --input catalogs/sources/open-movies.json
         """,
     )
     parser.add_argument(
@@ -588,8 +588,8 @@ Examples:
         "-o",
         "--output",
         dest="output_dir",
-        default=None,
-        help="Directory to export validated JSON files (optional)",
+        default="dist",
+        help="Directory to export validated JSON files (default: dist)",
     )
     parser.add_argument(
         "--check-streams",
@@ -604,7 +604,8 @@ Examples:
     parser.add_argument(
         "--distribution",
         action="store_true",
-        help="Generate standard CDN distribution tree (index.json + byos-<slug>/manifest.json)",
+        default=True,
+        help="Generate standard CDN distribution tree (index.json + byos-<slug>/manifest.json) (default: True)",
     )
     parser.add_argument(
         "--minify",
